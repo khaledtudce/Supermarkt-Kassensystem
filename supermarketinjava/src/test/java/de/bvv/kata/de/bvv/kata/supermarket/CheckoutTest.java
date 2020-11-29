@@ -133,7 +133,6 @@ public class CheckoutTest extends TestCase {
 	 */
 	
 	public void testManyCasesOfBasketsYieldToTheCorrectTotals() {
-    	
 		assertEquals( 0.0d, getPriceOfNewBasket( "" ));
 		assertEquals( 50.0d, getPriceOfNewBasket( "A" ));
 		assertEquals( 80.0d, getPriceOfNewBasket( "AB" ));
