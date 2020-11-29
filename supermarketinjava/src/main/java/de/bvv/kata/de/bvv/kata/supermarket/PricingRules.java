@@ -40,7 +40,7 @@ public class PricingRules implements PricingRulesInterface {
 		if(articleName==' ')
 			return new InterimResult(packagePrice, 0);
 		
-		List<PricingRuleValueObject> articlePricePackages = getPackageFor(articleName);
+		List<PricingRuleValueObject> articlePricePackages = getPackagesFor(articleName);
         for (PricingRuleValueObject pricingRuleValueObj : articlePricePackages) {
         	int currentPackageSize = pricingRuleValueObj.getPackageSize();
 			if(articleCount>=currentPackageSize) {
@@ -53,7 +53,7 @@ public class PricingRules implements PricingRulesInterface {
 
 		return new InterimResult(packagePrice, articleCount);
 	}
-	private List<PricingRuleValueObject> getPackageFor(char articleName) {
+	private List<PricingRuleValueObject> getPackagesFor(char articleName) {
 		return pricingRulesList.stream()
 				.filter(x->x.getArticleName()==articleName)
 				.sorted(Comparator.comparingInt(PricingRuleValueObject::getPackageSize).reversed())
@@ -64,7 +64,17 @@ public class PricingRules implements PricingRulesInterface {
 	 */
 	@Override
 	public void checkConsistency() throws IllegalStateException {
-//		throw new IllegalStateException("nix implementiert");
+		for (PricingRuleValueObject pricingRuleValueObj : pricingRulesList) {
+			char articleName = pricingRuleValueObj.getArticleName();
+			int packageSize = pricingRuleValueObj.getPackageSize();
+			double packagePrice = pricingRuleValueObj.getPackagePrice();
+			if(articleName=='\0' || articleName==' ')
+				throw new IllegalStateException("Illegal Article Name");
+			if(packageSize<=0 || packageSize>Integer.MAX_VALUE)
+				throw new IllegalStateException("Illegal Article package size");
+			if(packagePrice<0 || packagePrice>Double.MAX_VALUE)
+				throw new IllegalStateException("Illegal Article package price");
+		}
 	}
 	/**
 	 * interne Repräsentation der Preisliste
