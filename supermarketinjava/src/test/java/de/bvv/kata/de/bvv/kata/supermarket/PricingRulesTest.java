@@ -1,6 +1,7 @@
 package de.bvv.kata.de.bvv.kata.supermarket;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,8 +57,11 @@ public class PricingRulesTest{
 	
 	@Test
 	public void ShouldBeAbleToReturnPriceForPackagedArticleAndRemaining() {
-		InterimResult priceForNEqualItems = pricingRules.getPriceForNEqualItems('E', 3);
-		assertEquals(priceForNEqualItems.getRemainingCount(), 1);
-		assertEquals(0, priceForNEqualItems.getCalculatedPrice(), 30.0d);
+		boolean IllegalStateExceptionThrowed = false;
+		try {
+			pricingRules.getPriceForNEqualItems('E', 3);
+		}
+		catch( IllegalStateException e ) { IllegalStateExceptionThrowed = true; }
+		assertTrue(IllegalStateExceptionThrowed);
 	}
 }

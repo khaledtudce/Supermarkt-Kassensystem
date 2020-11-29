@@ -14,44 +14,34 @@ import java.util.Map;
  * 
  * @author bvv\b00359 (Tobias Zepter)
  */
+
 public class Checkout implements CheckoutInterface {
+	PricingRulesInterface pricingRules;
 	Map<Character, Integer> map = new HashMap<Character, Integer>();
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public void setPricingRules(PricingRulesInterface pricingRules) throws IllegalStateException {
 		pricingRules.checkConsistency();
 		this.pricingRules = pricingRules;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public void scan(char articleName) throws IllegalArgumentException {
-		//...
 		if(map.containsKey(articleName)) {
 			map.put(articleName, map.get(articleName)+1);
 		}else
 			map.put(articleName, 1);
 	}
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public double getTotalPrice() throws IllegalStateException {
 		double priceToReturn = 0d;
-		//...
 		for (Map.Entry<Character, Integer> entry : map.entrySet()) {
 			InterimResult oneArticle = pricingRules.getPriceForNEqualItems(entry.getKey(), entry.getValue());
 			priceToReturn += oneArticle.getCalculatedPrice(); 
 	    }
 		return priceToReturn;
 	}
-	/**
-	 * interne Datenhaltung für die aktuellen Preisregeln
-	 */
-	PricingRulesInterface pricingRules;
 }
 
 
